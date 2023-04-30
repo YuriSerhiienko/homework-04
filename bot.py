@@ -15,28 +15,28 @@ def input_error(func):
             return "Incorrect values"
     return inner
 
-def greeting(_):
+@input_error
+def greeting():
     return "How can I help you?"
 
 def unknown_command():
     return "Unknown command"
 
-def exit(_):
+@input_error
+def exit():
     return None
 
 @input_error
-def add_user(*args):
-    name, phone = args
+def add_user(name, phone):
     phonebook[name] = int(phone)
     return "Contact added successfully"
 
 @input_error
-def change_phone(*args):
-    name, phone = args
+def change_phone(name, phone):
     phonebook[name] = phone
     return "Contact updated successfully."
 
-def show_all(_):
+def show_all():
     if not phonebook:
         return "The phonebook is empty"
     result = ''
@@ -68,12 +68,12 @@ def main():
                 args = args[0].split()    
                 result = handler(*args)
             else:
-                result = handler("")
+                result = handler(*args)
         elif args and commands.get(command + ' ' + args[0]):
             command = command + ' ' + args[0]
             args = args[1:]
             handler = commands.get(command)      
-            result = handler(args)
+            result = handler(*args)
         else:
             result = unknown_command()
 
